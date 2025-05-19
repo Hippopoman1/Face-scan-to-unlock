@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <!-- Navbar -->
+    <nav style="height: 100px; position: sticky; top: 0; z-index: 50;"
+        class="bg-cyan-500 p-4 flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center">
+            <h1 class="text-2xl text-white font-bold p-6">smart door</h1>
+        </div>
+        <!-- Profile -->
+        <div class="flex items-center space-x-3">
+            {% for img in profile_img %}
+            <p>{{ img.name }}</p>
+            <a href="{% url 'profile' %}">
+                <img src="{{ img.profile_picture.url }}" alt="Profile Picture"
+                    class="w-10 h-10 rounded-full border-2 border-white">
+            </a>
+            {% endfor %}
+        </div>
+    </nav>
+
+    <!-- Profile Container -->
+    <div class="max-w-2xl mx-auto mt-10 bg-white rounded-lg shadow-md overflow-hidden">
+        <!-- Header -->
+        <div class="bg-cyan-700 text-white py-4 px-6 text-2xl font-semibold text-center">
+            เพิ่มผู้ดูแล
+        </div>
+        <!-- Content -->
+        <div class="p-6">
+
+            <!-- Form -->
+            <form method="post" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+
+                <!-- Input Field: ID Student -->
+                <div>
+                    <label for="id_student" class="block text-gray-700 font-semibold">ID Student</label>
+                    <input type="number" id="id_student" name="id_student"
+                        class="w-full border border-black px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                </div>
+
+                <!-- Input Field: Name -->
+                <div>
+                    <label for="name" class="block text-gray-700 font-semibold">Name</label>
+                    <input type="text" id="name" name="name"
+                        class="w-full border border-black px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                </div>
+
+                <!-- Input Field: Email -->
+                <div>
+                    <label for="email" class="block text-gray-700 font-semibold">Email</label>
+                    <input type="email" id="email" name="email"
+                        class="w-full border border-black px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                </div>
+
+                <!-- Input Field: Profile Picture -->
+                <div>
+                    <label for="profile_picture" class="block text-gray-700 font-semibold">Profile Picture</label>
+                    <input type="file" id="profile_picture" name="profile_picture"
+                        class="w-full border border-black px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit"
+                    class="w-full bg-cyan-700 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded">
+                    บันทึก
+                </button>
+            </form>
+
+            <div class="mt-6">
+                <a href="{% url 'admin' %}" class="text-teal-700 font-semibold hover:underline">
+                    🏠 กลับไปหน้าหลัก
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

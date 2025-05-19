@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Group</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav style="height: 100px; position: sticky; top: 0; z-index: 50;"
+            class="bg-cyan-500 p-4 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <h1 class="text-2xl text-white font-bold p-6">smart door</h1>
+            </div>
+            <!-- Profile -->
+            <div class="flex items-center space-x-3">
+                {%for img in profile_img%}
+                <p>{{img.name}}</p>
+                <a href="{% url 'profile' %}">
+                    <img src="{{ img.profile_picture.url }}" alt="Profile Picture"
+                        class="w-10 h-10 rounded-full border-2 border-white">
+                </a>
+                {% endfor %}
+
+
+            </div>
+        </nav>
+
+    <!-- Container -->
+    <div class="max-w-5xl mx-auto mt-10 bg-white rounded-lg shadow-lg p-6">
+        <!-- Header -->
+        <h2 class="text-3xl font-bold text-gray-800 mb-4 text-center">Add User to Group</h2>
+
+        <!-- Group Name -->
+        <h3 class="text-xl font-semibold text-gray-600 mb-6 text-center">{{ group.group_name }}</h3>
+
+        <!-- Form -->
+        <form method="post">
+            {% csrf_token %}
+            <div class="overflow-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                    <!-- Table Head -->
+                    <thead>
+                        <tr class="bg-cyan-600 text-white">
+                            <th class="py-3 px-4 text-left">ID</th>
+                            <th class="py-3 px-4 text-left">Name</th>
+                            <th class="py-3 px-4 text-left">Email</th>
+                            <th class="py-3 px-4 text-center">
+                                <input type="checkbox" id="select_all" 
+                                       class="h-5 w-5 text-cyan-500 border-gray-300 rounded focus:ring-cyan-500">
+                            </th>
+                        </tr>
+                    </thead>
+                    <!-- Table Body -->
+                    <tbody>
+                        {% for user in users %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-2 px-4 border-b text-gray-700">{{ user.id_student }}</td>
+                            <td class="py-2 px-4 border-b text-gray-700">{{ user.name }}</td>
+                            <td class="py-2 px-4 border-b text-gray-700">{{ user.email }}</td>
+                            <td class="py-2 px-4 border-b text-center">
+                                <input type="checkbox" name="user_ids" value="{{ user.id }}" 
+                                       class="h-5 w-5 text-cyan-500 border-gray-300 rounded focus:ring-cyan-500">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-6 text-center">
+                <button type="submit" 
+                        class="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-2 px-6 rounded transition duration-300">
+                    บันทึก
+                </button>
+            </div>
+        </form>
+        <a href="{% url 'group' %}" class="text-teal-700 font-semibold hover:underline">
+            🏠 กลับไปหน้าหลัก
+        </a>
+    </div>
+
+    <!-- JavaScript สำหรับ Select All -->
+    <script>
+        document.getElementById('select_all').addEventListener('change', function(e) {
+            const checkboxes = document.querySelectorAll('input[name="user_ids"]');
+            checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+        });
+    </script>
+
+</body>
+</html>

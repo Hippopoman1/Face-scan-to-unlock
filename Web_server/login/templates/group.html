@@ -1,0 +1,223 @@
+{% load tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+
+    {% tailwind_css %}
+</head>
+
+<body>
+    <div class="h-screen flex flex-col bg-gray-100">
+        <!-- Navbar -->
+        <nav style="height: 100px; position: sticky; top: 0; z-index: 50;"
+            class="bg-cyan-500 p-4 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <h1 class="text-2xl text-white font-bold p-6">smart door</h1>
+            </div>
+            <!-- Profile -->
+            <div class="flex items-center space-x-3">
+                {%for img in profile_img%}
+                <p>{{img.name}}</p>
+                <a href="{% url 'profile' %}">
+                    <img src="{{ img.profile_picture.url }}" alt="Profile Picture"
+                        class="w-10 h-10 rounded-full border-2 border-white">
+                </a>
+                {% endfor %}
+
+
+            </div>
+        </nav>
+
+        <!-- Content and Sidebar -->
+        <div class="flex-1 flex">
+
+
+            <!-- Sidebar -->
+            <aside style="width: 250px; position: sticky; top: 120px; height: calc(100vh - 120px);"
+                class="bg-gray-100 text-gray-800 flex flex-col ">
+                <nav class="flex-grow">
+                    <ul class="space-y-4 py-6 px-4 text-lg">
+                        <!-- Menu Header -->
+                        <li class="text-2xl font-bold text-gray-700 mb-4">
+                            <span>Menu</span>
+                        </li>
+                        <!-- Menu Items -->
+                        <li>
+                            <a href="{% url 'home' %}"
+                                class="flex items-center space-x-3 px-4 py-2 rounded-md hover:bg-blue-100 hover:text-blue-600 transition duration-150">
+                                <span>🏠</span>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'door' %}"
+                                class="flex items-center space-x-3 px-4 py-2 rounded-md hover:bg-blue-100 hover:text-blue-600 transition duration-150">
+                                <span>🚪</span>
+                                <span>Door</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'admin' %}"
+                                class="flex items-center space-x-3 px-4 py-2 rounded-md hover:bg-blue-100 hover:text-blue-600 transition duration-150">
+                                <span>👨‍💼</span>
+                                <span>Admin</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'user' %}"
+                                class="flex items-center space-x-3 px-4 py-2 rounded-md hover:bg-blue-100 hover:text-blue-600 transition duration-150">
+                                <span>👥</span>
+                                <span>User</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'log' %}"
+                                class="flex items-center space-x-3 px-4 py-2 rounded-md hover:bg-blue-100 hover:text-blue-600 transition duration-150">
+                                <span>📜</span>
+                                <span>Log</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'group' %}"
+                                class="flex items-center space-x-3 px-4 py-2 rounded-md hover:bg-blue-100 hover:text-blue-600 transition duration-150">
+                                <span>👨‍👩‍👧‍👦</span>
+                                <span>Group</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="flex-1 bg-gray-50 flex flex-col items-center py-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">group</h2>
+                <div class="w-full max-w-6xl bg-white p-6 shadow-lg rounded-lg">
+                    <!-- Action Links -->
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold text-gray-700">จัดการกลุ่ม</h3>
+                        <div class="flex space-x-4">
+                            <a href="{% url 'add_group' %}" class="text-sm text-blue-500 hover:underline">
+                                เพิ่มกลุ่ม
+                            </a>
+
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap justify-around">
+                        {% for group in groups %}
+                        <div id="group-{{ group.id }}" class="relative flex flex-col my-6 bg-sky-200 shadow-sm border rounded-lg w-96">
+                            <div class="p-4 flex justify-between items-start">
+                                <h6 class="mb-2 text-slate-800 text-xl font-semibold">
+                                    {{ group.group_name }}
+                                </h6>
+                                <div class="relative inline-block text-left">
+                                    <a href="#" class="dropdown-toggle text-slate-800 hover:text-slate-600"
+                                       data-group-id="{{ group.id }}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                      </svg>
+                                      </a>
+                    
+                                    <!-- Dropdown อยู่ภายใน Card -->
+                                    <div id="dropdown-menu-{{ group.id }}" 
+                                        class="dropdown-menu hidden absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                                        <a href="{% url 'add_user_to_group' group.id %}"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Add User</a>
+                                        <a href="{% url 'edit_group' group.id %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit</a>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 pt-0">
+                                <p class="text-slate-600 leading-normal font-light">
+                                    {{ group.description }}
+                                </p>
+                    
+                                <button class="text-red-500 hover:text-red-700 text-sm delete-group-btn"
+                                    data-group-id="{{ group.id }}">
+                                    ลบ
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            document.querySelectorAll(".dropdown-toggle").forEach(toggle => {
+                                toggle.addEventListener("click", function (event) {
+                                    event.preventDefault();
+                                    let groupId = this.getAttribute("data-group-id");
+                                    let dropdown = document.getElementById(`dropdown-menu-${groupId}`);
+                    
+                                    // ปิด dropdown ทั้งหมดก่อน
+                                    document.querySelectorAll(".dropdown-menu").forEach(menu => {
+                                        if (menu !== dropdown) {
+                                            menu.classList.add("hidden");
+                                        }
+                                    });
+                    
+                                    // เปิด dropdown ของ card ที่ถูกกด
+                                    dropdown.classList.toggle("hidden");
+                                });
+                            });
+                    
+                            // ปิด dropdown เมื่อคลิกที่อื่น
+                            document.addEventListener("click", function (event) {
+                                if (!event.target.closest(".dropdown-toggle") && !event.target.closest(".dropdown-menu")) {
+                                    document.querySelectorAll(".dropdown-menu").forEach(menu => {
+                                        menu.classList.add("hidden");
+                                    });
+                                }
+                            });
+                        });
+                    </script>
+                    
+
+
+                </div>
+            </main>
+
+
+
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const deleteButtons = document.querySelectorAll('.delete-group-btn');
+
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        const groupId = this.dataset.groupId; // ดึงค่า group_id จาก data attribute
+                        const groupCard = document.getElementById(`group-${groupId}`); // ดึง Element ของกลุ่มนี้
+
+                        if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบกลุ่มนี้?")) {
+                            fetch(`/group/delete/${groupId}/`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': '{{ csrf_token }}',
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.status === 'success') {
+                                        groupCard.remove(); // ลบกลุ่มออกจาก DOM
+                                    } else {
+                                        alert("เกิดข้อผิดพลาด: " + data.message);
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
+                    });
+                });
+            });
+        </script>
+
+    </div>
+</body>
+
+</html>
